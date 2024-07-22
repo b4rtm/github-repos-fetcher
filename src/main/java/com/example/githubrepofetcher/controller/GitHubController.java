@@ -1,13 +1,14 @@
 package com.example.githubrepofetcher.controller;
 
-import com.example.githubrepofetcher.dto.response.ErrorResponse;
+import com.example.githubrepofetcher.dto.response.RepositoryResponse;
+import com.example.githubrepofetcher.exception.InvalidAcceptHeaderException;
 import com.example.githubrepofetcher.service.GitHubService;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/github")
@@ -20,15 +21,10 @@ public class GitHubController {
     }
 
     @GetMapping("/users/{username}/repos")
-    public ResponseEntity<?> getUserRepositories(@PathVariable String username, @RequestHeader(HttpHeaders.ACCEPT) String acceptHeader) {
+    public ResponseEntity<List<RepositoryResponse>> getUserRepositories(@PathVariable String username, @RequestHeader(HttpHeaders.ACCEPT) String acceptHeader) {
         if (!MediaType.APPLICATION_JSON_VALUE.equals(acceptHeader)) {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Accept header must be application/json");
+            throw new InvalidAcceptHeaderException("Accept header must be application/json");
         }
-
-        try {
-            return ResponseEntity.ok(gitHubService.getUserRepositories(username));
-        }  catch (HttpClientErrorException.NotFound e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), "User not found"));
-        }
+        return ResponseEntity.ok(gitHubService.getUserRepositories(username));
     }
 }

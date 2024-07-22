@@ -39,8 +39,8 @@ public class GitHubService {
 
     private List<GitHubRepository> fetchRepositories(String username) {
         String url = GITHUB_API_URL + "/users/" + username + "/repos";
-            GitHubRepository[] repos = restTemplate.getForObject(url, GitHubRepository[].class);
-            return repos != null ? Arrays.asList(repos) : Collections.emptyList();
+        GitHubRepository[] repos = restTemplate.getForObject(url, GitHubRepository[].class);
+        return repos != null ? Arrays.asList(repos) : Collections.emptyList();
     }
 
     private List<GitHubBranch> fetchBranches(String owner, String repoName) {
