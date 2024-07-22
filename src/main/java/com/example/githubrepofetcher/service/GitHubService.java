@@ -3,7 +3,8 @@ package com.example.githubrepofetcher.service;
 import com.example.githubrepofetcher.dto.Branch;
 import com.example.githubrepofetcher.dto.fetchresult.GitHubBranch;
 import com.example.githubrepofetcher.dto.fetchresult.GitHubRepository;
-import com.example.githubrepofetcher.dto.response.RepositoryResponse;
+import com.example.githubrepofetcher.dto.Repository;
+import com.example.githubrepofetcher.dto.response.RepositoriesResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,16 +25,16 @@ public class GitHubService {
     }
 
 
-    public List<RepositoryResponse> getUserRepositories(String username) {
+    public RepositoriesResponse getUserRepositories(String username) {
         List<GitHubRepository> repos = fetchRepositories(username);
-        return mapToRepositoryResponseList(repos);
+        return new RepositoriesResponse(mapToRepositoryResponseList(repos));
     }
 
-    private List<RepositoryResponse> mapToRepositoryResponseList(List<GitHubRepository> repos) {
+    private List<Repository> mapToRepositoryResponseList(List<GitHubRepository> repos) {
         return repos.stream().filter(repo -> !repo.isFork()).map(repo -> {
             List<GitHubBranch> branches = fetchBranches(repo.owner().login(), repo.name());
             List<Branch> branchList = branches.stream().map(branch -> new Branch(branch.name(), branch.commit().sha())).collect(Collectors.toList());
-            return new RepositoryResponse(repo.name(), repo.owner().login(), branchList);
+            return new Repository(repo.name(), repo.owner().login(), branchList);
         }).collect(Collectors.toList());
     }
 
