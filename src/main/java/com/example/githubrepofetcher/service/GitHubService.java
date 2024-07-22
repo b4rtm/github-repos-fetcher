@@ -26,8 +26,12 @@ public class GitHubService {
 
     public List<RepositoryResponse> getUserRepositories(String username) {
         List<GitHubRepository> repos = fetchRepositories(username);
+        return mapToRepositoryResponseList(repos);
+    }
+
+    private List<RepositoryResponse> mapToRepositoryResponseList(List<GitHubRepository> repos) {
         return repos.stream().filter(repo -> !repo.isFork()).map(repo -> {
-            List<GitHubBranch> branches = fetchBranches(username, repo.name());
+            List<GitHubBranch> branches = fetchBranches(repo.owner().login(), repo.name());
             List<Branch> branchList = branches.stream().map(branch -> new Branch(branch.name(), branch.commit().sha())).collect(Collectors.toList());
             return new RepositoryResponse(repo.name(), repo.owner().login(), branchList);
         }).collect(Collectors.toList());
