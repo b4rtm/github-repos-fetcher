@@ -4,7 +4,7 @@ import com.example.githubrepofetcher.dto.Branch;
 import com.example.githubrepofetcher.dto.fetchresult.GitHubBranch;
 import com.example.githubrepofetcher.dto.fetchresult.GitHubRepository;
 import com.example.githubrepofetcher.dto.response.RepositoryResponse;
-import com.example.githubrepofetcher.excepion.UserNotFoundException;
+import com.example.githubrepofetcher.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

@@ -1,7 +1,7 @@
 package com.example.githubrepofetcher.controller;
 
 import com.example.githubrepofetcher.dto.response.ErrorResponse;
-import com.example.githubrepofetcher.excepion.UserNotFoundException;
+import com.example.githubrepofetcher.exception.UserNotFoundException;
 import com.example.githubrepofetcher.service.GitHubService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
