@@ -4,7 +4,6 @@ import com.example.githubrepofetcher.dto.Branch;
 import com.example.githubrepofetcher.dto.fetchresult.GitHubBranch;
 import com.example.githubrepofetcher.dto.fetchresult.GitHubRepository;
 import com.example.githubrepofetcher.dto.response.RepositoryResponse;
-import com.example.githubrepofetcher.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -36,11 +35,8 @@ public class GitHubService {
 
     private List<GitHubRepository> fetchRepositories(String username) {
         String url = GITHUB_API_URL + "/users/" + username + "/repos";
-        GitHubRepository[] repos = restTemplate.getForObject(url, GitHubRepository[].class);
-        if (repos == null) {
-            throw new UserNotFoundException("User " + username + "not found");
-        }
-        return Arrays.asList(repos);
+            GitHubRepository[] repos = restTemplate.getForObject(url, GitHubRepository[].class);
+            return repos != null ? Arrays.asList(repos) : Collections.emptyList();
     }
 
     private List<GitHubBranch> fetchBranches(String owner, String repoName) {
